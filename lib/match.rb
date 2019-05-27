@@ -64,11 +64,15 @@ class Match
 
         puts "Your move: "
         user_input = gets.chomp
-        move = @board.validate_move(user_input)
+        result = check_length(user_input)
 
-        until move
+        move = @board.validate_move(user_input)
+       
+        
+        until move && result
             puts "Please enter a valid input"
             user_input = gets.chomp
+            result = check_length(user_input)
             move = @board.validate_move(user_input)
         end 
 
@@ -77,6 +81,26 @@ class Match
         @board.turn_type = next_turn
        
     end 
+
+    #method to validate input length
+    def check_length(input)
+        n = input.length
+        if n == 2
+
+        else
+            return false
+        end
+
+        row = input[0].to_i
+        col = input[1].to_i
+        if row <3 && row >=0 && col <3 && col >= 0
+          result = true
+        else
+            result = false
+        end
+        return result
+    end
+# END method to validate input length
     
 end
 

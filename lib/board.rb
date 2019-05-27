@@ -33,8 +33,11 @@ class Board
     def set_cell=(value)
         row = value[0].to_i
         col = value[1].to_i
-        puts "turn type #{@turn_type}"
-        dimensions[row][col] = @turn_type
+        
+            puts "turn type #{@turn_type}"
+            dimensions[row][col] = @turn_type
+    
+       
     end
 
     def validate_move(current_move)
