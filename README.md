@@ -14,6 +14,8 @@ Object Oriented Programming
 
 User Input
 
+## Rules of the Game
+
 ## Contributors
 
 [Diego Arvizu](https://github.com/diegoarvz4)
