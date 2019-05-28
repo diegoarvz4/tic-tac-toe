@@ -100,7 +100,32 @@ class Match
         end
         return result
     end
-# END method to validate input length
+    # END method to validate input length
     
+    # Method to evaluate a winner, a tie,
+    def is_over?
+
+        @board.check_winner_triplets
+
+    end 
+
+    def call_winner
+
+        msg_win = " "
+
+        if @player_1 == board.winner_type
+            msg_win = "#{1}"
+            
+        else 
+            msg_win = "#{2}"
+            
+        end 
+           
+      
+
+        puts "Player #{msg_win} wins!"
+
+    end 
+
 end
 
