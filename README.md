@@ -17,9 +17,10 @@ User Input
 ## Rules of the Game
 
 ## Contributors
+\[Diego Arvizu\](https://github.com/diegoarvz4)
 
-\[Diego Arvizu](https://github.com/diegoarvz4)
-\[Albert Ngodi](https://github.com/ngodi)
+\[Albert Ngodi\](https://github.com/ngodi)
+
 # Demo Project View Link
 
 [Live Version]()
