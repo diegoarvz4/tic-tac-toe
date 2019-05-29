@@ -100,6 +100,7 @@ class Match
         end
         return result
     end
+    
 # END method to validate input length
     
 end
