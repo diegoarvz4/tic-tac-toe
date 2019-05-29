@@ -35,6 +35,15 @@ Download the project.
 Open the terminal in the bin folder. Run $ruby tic_tac_toe.rb and start playing!
 
 ## Contributors
+\[Diego Arvizu\](https://github.com/diegoarvz4)
 
+\[Albert Ngodi\](https://github.com/ngodi)
+
+<<<<<<< HEAD
 [Diego Arvizu](https://github.com/diegoarvz4)
 [Albert Ngodi](https://github.com/ngodi)
+=======
+# Demo Project View Link
+
+[Live Version]()
+>>>>>>> fd2feee6e1ddcc91cb039198d0a6af295ac717bc
