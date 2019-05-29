@@ -18,8 +18,8 @@ User Input
 
 ## Contributors
 
-[Diego Arvizu](https://github.com/diegoarvz4)
-[Albert Ngodi](https://github.com/ngodi)
+\[Diego Arvizu](https://github.com/diegoarvz4)
+\[Albert Ngodi](https://github.com/ngodi)
 # Demo Project View Link
 
 [Live Version]()
