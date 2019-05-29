@@ -23,8 +23,14 @@ class Match
 
     def welcome_message
         puts "Welcome to the Tic Tac Toe Board Game"
+        puts " "
         puts "Player 1 is #{@player_1}"
         puts "Player 2 is #{@player_2}"
+        puts " "
+        puts "Input as xy format. x => row, y => column. 00 input stands for row => 0, column => 0 "
+        puts " "
+        puts "GO!"
+        puts " "
 
     end
 
@@ -62,7 +68,7 @@ class Match
             next_turn = "x"
         end 
 
-        puts "Your move: "
+        print "Your move: "
         user_input = gets.chomp
         result = check_length(user_input)
 
@@ -113,17 +119,20 @@ class Match
 
         msg_win = " "
 
-        if @player_1 == board.winner_type
-            msg_win = "#{1}"
-            
+        if @board.winner_type == "TIE"
+            puts "It's a tie"
         else 
-            msg_win = "#{2}"
-            
-        end 
-           
-      
+            if @player_1 == @board.winner_type
+                msg_win = "#{1}"
+                
+            else 
+                msg_win = "#{2}"
+                
+            end 
 
-        puts "Player #{msg_win} wins!"
+            puts "Player #{msg_win} wins"
+        end 
+        
 
     end 
 

@@ -17,7 +17,7 @@ class Board
                 dimensions[i] << " "
             end
         end 
-        @moves = dimensions.clone
+        @moves = []
         @turn_type = turn_type
         @winner_type = ""
 
@@ -87,8 +87,10 @@ class Board
 
         return winner if winner 
 
-        return true if @moves.length == 9 
-
+        if @moves.length == 9 
+            @winner_type = "TIE"
+            return true 
+        end 
     end
 
 
