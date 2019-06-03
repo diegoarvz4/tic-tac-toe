@@ -9,30 +9,17 @@ class Match
 
     attr_accessor :game_over
 
+    attr_accessor :turn_type
 
-    def initialize
+    def initialize(board)
 
-        selected = assignate_type
-        
-        @board = Board.new(selected)
+        @turn_type = assignate_type
+        @board = board 
         @game_over = false 
-        welcome_message
+        welcome_message(@player_1, player_2)
         board.display
-
     end
 
-    def welcome_message
-        puts "Welcome to the Tic Tac Toe Board Game"
-        puts " "
-        puts "Player 1 is #{@player_1}"
-        puts "Player 2 is #{@player_2}"
-        puts " "
-        puts "Input as xy format. x => row, y => column. 00 input stands for row => 0, column => 0 "
-        puts " "
-        puts "GO!"
-        puts " "
-
-    end
 
     def assignate_type
 
@@ -49,63 +36,19 @@ class Match
 
     def user_move
         
+        next_turn = @board.display_player_turn(turn_type, player_1,player_2)
+
+        @board.user_input()
         
-        next_turn = ""
-        if board.turn_type == "x"
 
-            if @player_1 == "x"
-                puts "Player #{1} turn"
-            else 
-                puts "Player #{2} turn"
-            end 
-            next_turn = "o"
-        else  
-            if @player_1 == "o"
-                puts "Player #{1} turn"
-            else 
-                puts "Player #{2} turn"
-            end 
-            next_turn = "x"
-        end 
+        @board.set_cell(user_input, @turn_type)
 
-        print "Your move: "
-        user_input = gets.chomp
-        result = check_length(user_input)
-
-        move = @board.validate_move(user_input)
-       
-        
-        until move && result
-            puts "Please enter a valid input"
-            user_input = gets.chomp
-            result = check_length(user_input)
-            move = @board.validate_move(user_input)
-        end 
-
-        @board.set_cell = user_input
-
-        @board.turn_type = next_turn
+        turn_type = next_turn
        
     end 
 
     #method to validate input length
-    def check_length(input)
-        n = input.length
-        if n == 2
-
-        else
-            return false
-        end
-
-        row = input[0].to_i
-        col = input[1].to_i
-        if row <3 && row >=0 && col <3 && col >= 0
-          result = true
-        else
-            result = false
-        end
-        return result
-    end
+    
     # END method to validate input length
     
     # Method to evaluate a winner, a tie,
@@ -135,6 +78,54 @@ class Match
         
 
     end 
+
+    def check_winner_triplets(board, moves)
+
+        winner = true 
+
+        for i in 0..board.length-1
+            return true if all_equal?(@board[i])
+        end
+        transposed_array = board.transpose   
+        # check each column vertically (3)
+        for i in 0..board.length-1   
+            return true if all_equal?(transposed_array[i])
+        end
+        # check all diagonals
+
+        for i in 0..board.length - 2
+            
+            if board[i][i] != board[i+1][i+1] || board[i][i] == " "
+                winner = false 
+                break  
+            end
+        end 
+       
+        return winner if winner
+
+        winner = true 
+
+        for i in 0..board.length - 2
+            if board[2-i][i] != board[2-i-1][i+1] || board[2-i][i] == " "
+                winner = false  
+                break
+            end
+        end 
+
+        return winner if winner 
+
+        if moves.length == 9 
+            @winner_type = "TIE"
+            return true 
+        end 
+    end
+
+    def all_equal?(array)
+        
+        return false if array.uniq.first == " "
+        @winner_type = array.uniq.first
+        array.uniq.size <= 1
+    end
 
 end
 

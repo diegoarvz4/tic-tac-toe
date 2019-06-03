@@ -1,6 +1,7 @@
 require_relative "../lib/match"
 
-match = Match.new
+board = Board.new
+match = Match.new(board)
 
 #LOOP GAME
 

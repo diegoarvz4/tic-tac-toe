@@ -2,8 +2,6 @@
 class Board
 
     attr_accessor :dimensions
-   
-    attr_accessor :turn_type
 
     attr_accessor :moves
 
@@ -18,11 +16,46 @@ class Board
             end
         end 
         @moves = []
-        @turn_type = turn_type
         @winner_type = ""
 
     end 
 
+
+    def welcome_message(player_1, player_2)
+        puts "Welcome to the Tic Tac Toe Board Game"
+        puts " "
+        puts "Player 1 is #{player_1}"
+        puts "Player 2 is #{player_2}"
+        puts " "
+        puts "Input as xy format. x => row, y => column. 00 input stands for row => 0, column => 0 "
+        puts " "
+        puts "GO!"
+        puts " "
+    end 
+
+    def display_player_turn(turn_type, player_1, player_2)
+
+        next_turn = ""
+        player_turn = ""
+        if turn_type == "x"
+            if player_1 == "x"
+                player_turn = "#{1}"
+            else 
+                player_turn  ="#{2}"
+            end 
+            next_turn = "o"
+        else  
+            if player_1 == "o"
+                player_turn = "#{1}"
+            else 
+                player_turn  ="#{2}"
+            end 
+            next_turn = "x"
+        end 
+        puts "Player #{player_turn} turn"
+        next_turn
+
+    end 
   
     def display
         for row in 0..2
@@ -33,12 +66,10 @@ class Board
         end
     end 
 
-    def set_cell=(value)
+    def set_cell(value, turn)
         row = value[0].to_i
         col = value[1].to_i
-        dimensions[row][col] = @turn_type
-    
-       
+        dimensions[row][col] = turn 
     end
 
     def validate_move(current_move)
@@ -52,53 +83,40 @@ class Board
       
     end
 
-    def check_winner_triplets()
+    def user_input
 
-        winner = true 
+        print "Your move: "
+        user_input = gets.chomp
+        result = check_length(user_input)
 
-        for i in 0..@dimensions.length-1
-            return true if all_equal?(@dimensions[i])
-        end
-        transposed_array = @dimensions.transpose   
-        # check each column vertically (3)
-        for i in 0..@dimensions.length-1   
-            return true if all_equal?(transposed_array[i])
-        end
-        # check all diagonals
-
-        for i in 0..@dimensions.length - 2
-            
-            if @dimensions[i][i] != @dimensions[i+1][i+1] || @dimensions[i][i] == " "
-                winner = false 
-                break  
-            end
-        end 
+        move = @board.validate_move(user_input)
        
-        return winner if winner
-
-        winner = true 
-
-        for i in 0..@dimensions.length - 2
-            if @dimensions[2-i][i] != @dimensions[2-i-1][i+1] || @dimensions[2-i][i] == " "
-                winner = false  
-                break
-            end
-        end 
-
-        return winner if winner 
-
-        if @moves.length == 9 
-            @winner_type = "TIE"
-            return true 
-        end 
-    end
-
-
-    def all_equal?(array)
         
-        return false if array.uniq.first == " "
-        @winner_type = array.uniq.first
-        array.uniq.size <= 1
+        until move && result
+            puts "Please enter a valid input"
+            user_input = gets.chomp
+            result = check_length(user_input)
+            move = @board.validate_move(user_input)
+        end 
+
+    end 
+
+    def check_length(input)
+        n = input.length
+        if n == 2
+
+        else
+            return false
+        end
+
+        row = input[0].to_i
+        col = input[1].to_i
+        if row <3 && row >=0 && col <3 && col >= 0
+          result = true
+        else
+            result = false
+        end
+        return result
     end
 
 
