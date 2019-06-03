@@ -1,4 +1,5 @@
 require_relative "board"
+require_relative "player"
 
 class Match
 
@@ -11,80 +12,140 @@ class Match
 
     attr_accessor :turn_type
 
+    attr_accessor :moves
+
+    attr_accessor :winner_type
+
     def initialize(board)
 
-        @turn_type = assignate_type
+        @turn_type = decide_turns
         @board = board 
         @game_over = false 
-        welcome_message(@player_1, player_2)
-        board.display
+        @moves = []
+        @winner_type = ""
+        @board.welcome_message(@player_1.token, @player_2.token)
+        
     end
 
+    def game_loop
 
-    def assignate_type
+        until game_over?
 
+            decide_next_turn
+            user_move
+            @board.display
+
+        end 
+
+        decide_winner_or_tie
+
+    end 
+
+    def game_over?
+
+        winner? || tie?
+
+    end 
+
+    def decide_winner_or_tie
+
+        if @winner_type != "TIE"
+
+            @board.declare_player(@turn_type)
+        else  
+            @board.declare_tie
+        end 
+
+
+    end 
+
+    # The match selects the characters and decides who starts
+    def decide_turns
+        #possible tokens
         types = ["x","o"]
-
         num_1 = rand(0..1)
         num_2 = num_1 == 1 ? 0 : 1
-
-        @player_1 = types[num_1]
-        @player_2 = types[num_2]
-
+        #instantiate and assignate a token
+        @player_1 = Player.new(types[num_1])
+        @player_2 = Player.new(types[num_2])
+        #num_1 is the token that starts the match
         types[num_1]
     end
 
     def user_move
+
+        @board.display_player_turn(turn_type, @player_1.token, @player_2.token)
+        input = @board.user_input
+        length = check_length(input)
+        avialable = valid_move(input)
+
+        until length && avialable
+            @board.display_input_error
+            input = @board.user_input
+            length = check_length(input)
+            avialable = valid_move(input)
+        end
         
-        next_turn = @board.display_player_turn(turn_type, player_1,player_2)
-
-        @board.user_input()
-        
-
-        @board.set_cell(user_input, @turn_type)
-
-        turn_type = next_turn
+        @board.set_cell(input, @turn_type)
+        add_move(input)
        
     end 
 
-    #method to validate input length
+    def add_move(move)
+    
+        @moves << move 
+    
+    end 
+
+    def decide_next_turn
+
+        if @turn_type == "o"
+            @turn_type = "x" 
+        else  
+            @turn_type = "o"
+        end 
+    end 
+
+
+  #method to validate input length
+    def check_length(input)
+        n = input.length
+        if n == 2
+
+        else
+            return false
+        end
+
+        row = input[0].to_i
+        col = input[1].to_i
+        if row <3 && row >=0 && col <3 && col >= 0
+          result = true
+        else
+            result = false
+        end
+        return result
+    end
+
+  
     
     # END method to validate input length
     
-    # Method to evaluate a winner, a tie,
-    def is_over?
-
-        @board.check_winner_triplets
-
-    end 
-
-    def call_winner
-
-        msg_win = " "
-
-        if @board.winner_type == "TIE"
-            puts "It's a tie"
-        else 
-            if @player_1 == @board.winner_type
-                msg_win = "#{1}"
-                
-            else 
-                msg_win = "#{2}"
-                
-            end 
-
-            puts "Player #{msg_win} wins"
-        end 
+    def valid_move(current_move)
         
+       !@moves.include? current_move
+       
+     end
 
-    end 
 
-    def check_winner_triplets(board, moves)
+    # Method to evaluate a winner, a tie,
+     private 
+     def winner?
+
+        board = @board.dimensions
 
         winner = true 
-
         for i in 0..board.length-1
-            return true if all_equal?(@board[i])
+            return true if all_equal?(board[i])
         end
         transposed_array = board.transpose   
         # check each column vertically (3)
@@ -92,7 +153,6 @@ class Match
             return true if all_equal?(transposed_array[i])
         end
         # check all diagonals
-
         for i in 0..board.length - 2
             
             if board[i][i] != board[i+1][i+1] || board[i][i] == " "
@@ -112,13 +172,16 @@ class Match
             end
         end 
 
-        return winner if winner 
+        return winner
 
-        if moves.length == 9 
+     end 
+
+    def tie?
+        if @moves.length == 9 
             @winner_type = "TIE"
             return true 
         end 
-    end
+    end 
 
     def all_equal?(array)
         

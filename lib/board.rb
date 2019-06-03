@@ -3,11 +3,8 @@ class Board
 
     attr_accessor :dimensions
 
-    attr_accessor :moves
-
-    attr_accessor :winner_type
    
-    def initialize(turn_type)
+    def initialize()
         @dimensions = []
         for i in 0..2
             dimensions << []
@@ -15,8 +12,6 @@ class Board
                 dimensions[i] << " "
             end
         end 
-        @moves = []
-        @winner_type = ""
 
     end 
 
@@ -31,11 +26,11 @@ class Board
         puts " "
         puts "GO!"
         puts " "
+        display
     end 
 
     def display_player_turn(turn_type, player_1, player_2)
 
-        next_turn = ""
         player_turn = ""
         if turn_type == "x"
             if player_1 == "x"
@@ -43,18 +38,21 @@ class Board
             else 
                 player_turn  ="#{2}"
             end 
-            next_turn = "o"
+            
         else  
             if player_1 == "o"
                 player_turn = "#{1}"
             else 
                 player_turn  ="#{2}"
             end 
-            next_turn = "x"
+           
         end 
         puts "Player #{player_turn} turn"
-        next_turn
 
+    end 
+
+    def display_input_error
+        puts "Please enter a valid input"
     end 
   
     def display
@@ -72,54 +70,25 @@ class Board
         dimensions[row][col] = turn 
     end
 
-    def validate_move(current_move)
-        
-       if @moves.include? current_move
-            return false 
-       else 
-            @moves << current_move
-            return true 
-       end  
-      
-    end
+    
+    def declare_player(player)
+        puts "Player #{player} won!"
+        puts "GAME OVER!"
+    end 
+
+    def declare_tie
+        puts "It's a tie!"
+        puts "GAME OVER!"
+    end 
+
 
     def user_input
 
         print "Your move: "
         user_input = gets.chomp
-        result = check_length(user_input)
-
-        move = @board.validate_move(user_input)
-       
-        
-        until move && result
-            puts "Please enter a valid input"
-            user_input = gets.chomp
-            result = check_length(user_input)
-            move = @board.validate_move(user_input)
-        end 
+        user_input
 
     end 
-
-    def check_length(input)
-        n = input.length
-        if n == 2
-
-        else
-            return false
-        end
-
-        row = input[0].to_i
-        col = input[1].to_i
-        if row <3 && row >=0 && col <3 && col >= 0
-          result = true
-        else
-            result = false
-        end
-        return result
-    end
-
-
 
 end
 
