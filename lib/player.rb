@@ -1,8 +1,13 @@
 class Player
 
-    attr_accessor :token
+    attr_reader :token
 
-    def initialize(token)
+    def initialize
+        @token = ""
+    end 
+
+
+    def set_token(token)
         @token = token 
     end 
 

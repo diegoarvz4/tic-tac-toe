@@ -3,22 +3,12 @@ require_relative "player"
 
 class Match
 
-    attr_accessor :board
-
-    attr_accessor :player_1
-    attr_accessor :player_2
-
-    attr_accessor :game_over
-
-    attr_accessor :turn_type
-
-    attr_accessor :moves
-
-    attr_accessor :winner_type
 
     def initialize(board)
 
-        @turn_type = decide_turns
+        @player_1 = Player.new 
+        @player_2 = Player.new
+        @turn_type = decide_turns(@player_1, @player_2)
         @board = board 
         @game_over = false 
         @moves = []
@@ -41,40 +31,89 @@ class Match
 
     end 
 
+    # Method to evaluate a winner, a tie,
+     private
     def game_over?
 
         winner? || tie?
 
     end 
+     
+
+     def winner?
+
+        board = @board.dimensions
+
+        winner = true 
+        for i in 0..board.length-1
+            return true if all_equal?(board[i])
+        end
+        transposed_array = board.transpose   
+        # check each column vertically (3)
+        for i in 0..board.length-1   
+            return true if all_equal?(transposed_array[i])
+        end
+        # check all diagonals
+        for i in 0..board.length - 2 
+            if board[i][i] != board[i+1][i+1] || board[i][i] == " "
+                winner = false 
+                break  
+            end
+        end 
+       
+        return winner if winner
+
+        winner = true 
+
+        for i in 0..board.length - 2
+            if board[2-i][i] != board[2-i-1][i+1] || board[2-i][i] == " "
+                winner = false  
+                break
+            end
+        end 
+
+        winner
+
+     end 
+
+    def tie?
+        if @moves.length == 9 
+            @winner_type = "TIE"
+            return true 
+        end 
+    end 
+
+    def all_equal?(array)
+        
+        return false if array.uniq.first == " "
+        @winner_type = array.uniq.first
+        array.uniq.size <= 1
+    end
 
     def decide_winner_or_tie
 
         if @winner_type != "TIE"
-
             @board.declare_player(@turn_type)
         else  
             @board.declare_tie
         end 
-
-
     end 
 
     # The match selects the characters and decides who starts
-    def decide_turns
+    def decide_turns(player_1, player_2)
         #possible tokens
         types = ["x","o"]
         num_1 = rand(0..1)
         num_2 = num_1 == 1 ? 0 : 1
-        #instantiate and assignate a token
-        @player_1 = Player.new(types[num_1])
-        @player_2 = Player.new(types[num_2])
+        player_1.set_token(types[num_1])
+        player_2.set_token(types[num_2])
         #num_1 is the token that starts the match
         types[num_1]
     end
 
     def user_move
 
-        @board.display_player_turn(turn_type, @player_1.token, @player_2.token)
+        @board.display_player_turn(@turn_type, @player_1.token, @player_2.token)
         input = @board.user_input
         length = check_length(input)
         avialable = valid_move(input)
@@ -106,7 +145,6 @@ class Match
         end 
     end 
 
-
   #method to validate input length
     def check_length(input)
         n = input.length
@@ -125,8 +163,6 @@ class Match
         end
         return result
     end
-
-  
     
     # END method to validate input length
     
@@ -135,60 +171,6 @@ class Match
        !@moves.include? current_move
        
      end
-
-
-    # Method to evaluate a winner, a tie,
-     private 
-     def winner?
-
-        board = @board.dimensions
-
-        winner = true 
-        for i in 0..board.length-1
-            return true if all_equal?(board[i])
-        end
-        transposed_array = board.transpose   
-        # check each column vertically (3)
-        for i in 0..board.length-1   
-            return true if all_equal?(transposed_array[i])
-        end
-        # check all diagonals
-        for i in 0..board.length - 2
-            
-            if board[i][i] != board[i+1][i+1] || board[i][i] == " "
-                winner = false 
-                break  
-            end
-        end 
-       
-        return winner if winner
-
-        winner = true 
-
-        for i in 0..board.length - 2
-            if board[2-i][i] != board[2-i-1][i+1] || board[2-i][i] == " "
-                winner = false  
-                break
-            end
-        end 
-
-        return winner
-
-     end 
-
-    def tie?
-        if @moves.length == 9 
-            @winner_type = "TIE"
-            return true 
-        end 
-    end 
-
-    def all_equal?(array)
-        
-        return false if array.uniq.first == " "
-        @winner_type = array.uniq.first
-        array.uniq.size <= 1
-    end
 
 end
 
