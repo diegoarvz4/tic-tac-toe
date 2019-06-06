@@ -6,8 +6,8 @@ class Match
 
     def initialize(board)
 
-        @player_1 = Player.new 
-        @player_2 = Player.new
+        @player_1 = Player.new("X")
+        @player_2 = Player.new("O")
         @turn_type = decide_turns(@player_1, @player_2)
         @board = board 
         @game_over = false 
@@ -41,39 +41,22 @@ class Match
      
 
      def winner?
-
         board = @board.dimensions
+        #vertical and horizonal equality checks
+        j = 0
+       for i in 0...3
+        return true if (board[j]==board[j+1])&&(board[j+1]==board[j+2])
+        return true if (board[j]==board[j+3])&&(board[j+3]==board[j+6])
+        j += 3
+       end
 
-        winner = true 
-        for i in 0..board.length-1
-            return true if all_equal?(board[i])
-        end
-        transposed_array = board.transpose   
-        # check each column vertically (3)
-        for i in 0..board.length-1   
-            return true if all_equal?(transposed_array[i])
-        end
-        # check all diagonals
-        for i in 0..board.length - 2 
-            if board[i][i] != board[i+1][i+1] || board[i][i] == " "
-                winner = false 
-                break  
-            end
-        end 
-       
-        return winner if winner
+       #diagonals equality test
+     
+        return true if (board[0]==board[4])&&(board[4]==board[8])
+        return true if (board[2]==board[4])&&(board[4]==board[6])
+     
 
-        winner = true 
-
-        for i in 0..board.length - 2
-            if board[2-i][i] != board[2-i-1][i+1] || board[2-i][i] == " "
-                winner = false  
-                break
-            end
-        end 
-
-        winner
-
+      false
      end 
 
     def tie?
@@ -83,12 +66,6 @@ class Match
         end 
     end 
 
-    def all_equal?(array)
-        
-        return false if array.uniq.first == " "
-        @winner_type = array.uniq.first
-        array.uniq.size <= 1
-    end
 
     def decide_winner_or_tie
 
@@ -102,11 +79,10 @@ class Match
     # The match selects the characters and decides who starts
     def decide_turns(player_1, player_2)
         #possible tokens
-        types = ["x","o"]
+        types = ["X","O"]
         num_1 = rand(0..1)
         num_2 = num_1 == 1 ? 0 : 1
-        player_1.set_token(types[num_1])
-        player_2.set_token(types[num_2])
+        
         #num_1 is the token that starts the match
         types[num_1]
     end
@@ -138,30 +114,21 @@ class Match
 
     def decide_next_turn
 
-        if @turn_type == "o"
-            @turn_type = "x" 
+        if @turn_type == "O"
+            @turn_type = "X" 
         else  
-            @turn_type = "o"
+            @turn_type = "O"
         end 
     end 
 
   #method to validate input length
     def check_length(input)
-        n = input.length
-        if n == 2
-
+        
+        if input.is_a?(Integer) && input >= 0 && input <= 8
+        return true
         else
             return false
         end
-
-        row = input[0].to_i
-        col = input[1].to_i
-        if row <3 && row >=0 && col <3 && col >= 0
-          result = true
-        else
-            result = false
-        end
-        return result
     end
     
     # END method to validate input length
