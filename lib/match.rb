@@ -84,7 +84,7 @@ class Match
     end 
 
     # The match selects the characters and decides who starts
-    def decide_turns(player_1, player_2)
+    def decide_turns
         #possible tokens
         types = ["X","O"]
         num_1 = rand(0..1)
