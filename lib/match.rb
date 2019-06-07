@@ -8,7 +8,7 @@ class Match
 
         @player_1 = Player.new("X")
         @player_2 = Player.new("O")
-        @turn_type = decide_turns(@player_1, @player_2)
+        @turn_type = decide_turns
         @board = board 
         @game_over = false 
         @moves = []
@@ -66,12 +66,12 @@ class Match
       false
      end 
 
-   def tie?
-       if @moves.length == 9 
+    def tie?
+        if @moves.length == 9 
             @winner_type = "TIE"
             return true 
-   end 
-  end 
+        end 
+    end 
 
 
     def decide_winner_or_tie
