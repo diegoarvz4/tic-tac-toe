@@ -1,13 +1,8 @@
 module UI
     
-    def set_board_dimensions
 
-        dimensions= ['0','1','2','3','4','5','6','7','8']
-
-    end 
 
     def display
-        dimensions = set_board_dimensions
         for i in 0..8
             if i % 3 == 0
                 puts"\n" 
@@ -23,22 +18,22 @@ module UI
     def display_player_turn(turn_type, player_1, player_2)
 
         player_turn = ""
-        if turn_type == "x"
-            if player_1 == "x"
+        if turn_type == "X"
+            if player_1 == "X"
                 player_turn = "#{1}"
             else 
                 player_turn  ="#{2}"
             end 
             
         else  
-            if player_1 == "o"
+            if player_1 == "O"
                 player_turn = "#{1}"
             else 
                 player_turn  ="#{2}"
             end 
            
         end 
-        puts "Player #{player_turn} turn"
+        puts "Player #{player_turn}(#{turn_type}) turn"
 
     end 
 #method displays input error to user

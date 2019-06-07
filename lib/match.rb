@@ -46,8 +46,15 @@ class Match
         j = 0
        for i in 0...3
         return true if (board[j]==board[j+1])&&(board[j+1]==board[j+2])
-        return true if (board[j]==board[j+3])&&(board[j+3]==board[j+6])
+
         j += 3
+       end
+       #verticals equality test
+       j = 0
+       for i in 0...3
+
+        return true if (board[j]==board[j+3])&&(board[j+3]==board[j+6])
+        j += 1
        end
 
        #diagonals equality test
@@ -59,12 +66,12 @@ class Match
       false
      end 
 
-    def tie?
-        if @moves.length == 9 
+   def tie?
+       if @moves.length == 9 
             @winner_type = "TIE"
             return true 
-        end 
-    end 
+   end 
+  end 
 
 
     def decide_winner_or_tie
@@ -98,19 +105,16 @@ class Match
             @board.display_input_error
             input = @board.user_input
             length = check_length(input)
-            avialable = valid_move(input)
+           avialable = valid_move(input)
         end
-        
         @board.set_cell(input, @turn_type)
-        add_move(input)
+        @moves << input
+        
+       
        
     end 
 
-    def add_move(move)
-    
-        @moves << move 
-    
-    end 
+  
 
     def decide_next_turn
 

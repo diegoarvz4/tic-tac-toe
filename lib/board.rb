@@ -8,13 +8,13 @@ class Board
     attr_reader :dimensions
 
     def initialize
-        @dimensions = set_board_dimensions
+        @dimensions= [0,1,2,3,4,5,6,7,8]
     end
 
 
     def set_cell(value, turn)
        
-        dimensions[value] = turn 
+        @dimensions[value] = turn 
     end
 
 
