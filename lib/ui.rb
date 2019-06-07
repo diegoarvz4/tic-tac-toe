@@ -1,6 +1,4 @@
 module UI
-    
-
 
     def display
         for i in 0..8
@@ -34,7 +32,7 @@ module UI
            
         end 
         puts "Player #{player_turn}(#{turn_type}) turn"
-
+        
     end 
 #method displays input error to user
     def display_input_error
@@ -43,18 +41,18 @@ module UI
   
 
 #method displays welcome message to users
-def welcome_message(player_1, player_2)
-    puts "Welcome to the Tic Tac Toe Board Game"
-    puts " "
-    puts "Player 1 is #{player_1}"
-    puts "Player 2 is #{player_2}"
-    puts " "
-    puts "Enter number to place token "
-    puts " "
-    puts "GO!"
-    puts " "
-    display
-end
+    def welcome_message(player_1, player_2)
+        puts "Welcome to the Tic Tac Toe Board Game"
+        puts " "
+        puts "Player 1 is #{player_1}"
+        puts "Player 2 is #{player_2}"
+        puts " "
+        puts "Enter number to place token "
+        puts " "
+        puts "GO!"
+        puts " "
+        display
+    end
 
 #gets user input
     def user_input
@@ -73,4 +71,8 @@ end
         puts "GAME OVER!"
     end 
 
-    end
+    def test_ui
+        puts "testing"
+    end 
+
+end

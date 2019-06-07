@@ -4,14 +4,15 @@ require_relative "player"
 class Match
 
 
-    def initialize(board)
+    def initialize(board, player_1, player_2)
 
-        @player_1 = Player.new("X")
-        @player_2 = Player.new("O")
-        @turn_type = decide_turns
         @board = board 
-        @game_over = false 
+        @player_1 = player_1
+        @player_2 = player_2
+
+        @turn_type = decide_turns
         @moves = []
+
         @winner_type = ""
         @board.welcome_message(@player_1.token, @player_2.token)
         
@@ -67,7 +68,7 @@ class Match
      end 
 
     def tie?
-        if @moves.length == 9 
+        if @board.is_full? 
             @winner_type = "TIE"
             return true 
         end 
@@ -97,7 +98,8 @@ class Match
     def user_move
 
         @board.display_player_turn(@turn_type, @player_1.token, @player_2.token)
-        input = @board.user_input
+    
+        input = player_move.make_move
         length = check_length(input)
         avialable = valid_move(input)
 
@@ -108,12 +110,13 @@ class Match
            avialable = valid_move(input)
         end
         @board.set_cell(input, @turn_type)
-        @moves << input
-        
-       
-       
+        @moves << input     
     end 
 
+    def player_move
+        return @player_1 if  @player_1.token == @turn_type
+        return @player_2
+    end 
   
 
     def decide_next_turn

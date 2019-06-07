@@ -13,10 +13,14 @@ class Board
 
 
     def set_cell(value, turn)
-       
         @dimensions[value] = turn 
     end
 
+    def is_full?
+
+        !@dimensions.any?{|n| n.is_a?(Integer)} 
+
+    end 
 
     
 
