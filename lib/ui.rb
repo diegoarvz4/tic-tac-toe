@@ -71,8 +71,5 @@ module UI
         puts "GAME OVER!"
     end 
 
-    def test_ui
-        puts "testing"
-    end 
 
 end

@@ -1,30 +1,31 @@
 require_relative "board"
 require_relative "player"
+require_relative 'validation.rb' 
+require_relative 'turn_management.rb' 
 
 class Match
 
+    include Validation
+    include Turns 
 
     def initialize(board, player_1, player_2)
 
         @board = board 
         @player_1 = player_1
         @player_2 = player_2
-
-        @turn_type = decide_turns
-        @moves = []
-
+        @turn_type = setup_turns
         @winner_type = ""
-        @board.welcome_message(@player_1.token, @player_2.token)
-        
     end
 
     def game_loop
 
+        @board.welcome_message(@player_1.token, @player_2.token)
+
         until game_over?
 
-            decide_next_turn
+            @turn_type = set_next_turn(@turn_type)
             user_move
-            @board.display
+            game_state
 
         end 
 
@@ -33,39 +34,37 @@ class Match
     end 
 
     # Method to evaluate a winner, a tie,
-     private
+    private
+
+    def game_state
+        @board.display
+    end 
+
+
     def game_over?
-
         winner? || tie?
-
     end 
      
 
-     def winner?
+    def winner?
         board = @board.dimensions
         #vertical and horizonal equality checks
         j = 0
-       for i in 0...3
-        return true if (board[j]==board[j+1])&&(board[j+1]==board[j+2])
-
-        j += 3
-       end
+        for i in 0...3
+            return true if (board[j]==board[j+1])&&(board[j+1]==board[j+2])
+            j += 3
+        end
        #verticals equality test
-       j = 0
-       for i in 0...3
-
-        return true if (board[j]==board[j+3])&&(board[j+3]==board[j+6])
-        j += 1
-       end
-
+        j = 0
+        for i in 0...3
+            return true if (board[j]==board[j+3])&&(board[j+3]==board[j+6])
+            j += 1
+        end
        #diagonals equality test
-     
         return true if (board[0]==board[4])&&(board[4]==board[8])
-        return true if (board[2]==board[4])&&(board[4]==board[6])
-     
-
-      false
-     end 
+        return true if (board[2]==board[4])&&(board[4]==board[6]) 
+        false
+    end 
 
     def tie?
         if @board.is_full? 
@@ -84,67 +83,16 @@ class Match
         end 
     end 
 
-    # The match selects the characters and decides who starts
-    def decide_turns
-        #possible tokens
-        types = ["X","O"]
-        num_1 = rand(0..1)
-        num_2 = num_1 == 1 ? 0 : 1
-        
-        #num_1 is the token that starts the match
-        types[num_1]
-    end
-
     def user_move
-
         @board.display_player_turn(@turn_type, @player_1.token, @player_2.token)
-    
-        input = player_move.make_move
-        length = check_length(input)
-        avialable = valid_move(input)
-
-        until length && avialable
-            @board.display_input_error
-            input = @board.user_input
-            length = check_length(input)
-           avialable = valid_move(input)
-        end
-        @board.set_cell(input, @turn_type)
-        @moves << input     
+        current_player = player_turn(@player_1, @player_2, @turn_type)
+        input = current_player.make_move
+        input = input_validation(input, @board, @player_1.moves, @player_2.moves)
+        commit_move(@board, input, @turn_type, current_player) 
     end 
 
-    def player_move
-        return @player_1 if  @player_1.token == @turn_type
-        return @player_2
-    end 
-  
 
-    def decide_next_turn
-
-        if @turn_type == "O"
-            @turn_type = "X" 
-        else  
-            @turn_type = "O"
-        end 
-    end 
-
-  #method to validate input length
-    def check_length(input)
-        
-        if input.is_a?(Integer) && input >= 0 && input <= 8
-        return true
-        else
-            return false
-        end
-    end
+   
     
-    # END method to validate input length
-    
-    def valid_move(current_move)
-        
-       !@moves.include? current_move
-       
-     end
-
 end
 
