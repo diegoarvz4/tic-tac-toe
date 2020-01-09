@@ -17,7 +17,7 @@ class Board
     end
 
     def is_full?
-
+        puts 'full'
         @dimensions.all? { |square| square.is_a?(String) }
 
     end 

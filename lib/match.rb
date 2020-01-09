@@ -43,7 +43,7 @@ class Match
 
     def game_over?
         board = @board.dimensions
-        winner?(board) || tie?(board)
+        winner?(board) || tie?(@board)
     end 
      
 
